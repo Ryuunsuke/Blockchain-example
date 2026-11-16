@@ -1,0 +1,108 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>RtuCoin chain</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f6f6f4; margin: 30px; color: #111; }
+  .chain { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .block { background: #fff; border: 3px solid; border-radius: 10px; padding: 12px 16px; width: 230px; }
+  .block.ok  { border-color: #0ca30c; }
+  .block.bad { border-color: #d03b3b; background: #fbe9e9; }
+  .block h2 { font-size: 17px; margin: 0 0 8px; }
+  .block p  { font-size: 13px; margin: 6px 0; }
+  code { font-size: 12px; color: #444; }
+  .status { font-weight: bold; }
+  .arrow { font-size: 30px; color: #555; }
+  .arrow.broken { color: #d03b3b; }
+</style></head>
+<body>
+  <h1>RtuCoin blockchain (11 blocks)</h1>
+  <p>Each block stores the hash of the block before it. Hover over a hash to see it in full.</p>
+  <div class="chain">
+        <div class="block bad">
+            <h2>Block #0 (genesis)</h2>
+            <p><b>Timestamp:</b> 01/01/2022</p>
+            <p><b>Data:</b> "Genesis Block"</p>
+            <p><b>Previous hash:</b><br><code title="0">0</code></p>
+            <p><b>Hash:</b><br><code title="4006ba0e4c5312be98ed010e660366d44d5da91742beb50a5c9a432838fb2248">4006ba0e4c5312be…</code></p>
+            <p class="status">✗ hash does not match data</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #1</h2>
+            <p><b>Timestamp:</b> 01/02/2022</p>
+            <p><b>Data:</b> {"amount":7}</p>
+            <p><b>Previous hash:</b><br><code title="4006ba0e4c5312be98ed010e660366d44d5da91742beb50a5c9a432838fb2248">4006ba0e4c5312be…</code></p>
+            <p><b>Hash:</b><br><code title="002ea38837689a82fec02f82eb6ca50893dba48b33c6993058a3a16b0aa0e383">002ea38837689a82…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #2</h2>
+            <p><b>Timestamp:</b> 01/03/2022</p>
+            <p><b>Data:</b> {"amount":8}</p>
+            <p><b>Previous hash:</b><br><code title="002ea38837689a82fec02f82eb6ca50893dba48b33c6993058a3a16b0aa0e383">002ea38837689a82…</code></p>
+            <p><b>Hash:</b><br><code title="009f6ed2be11ef3184c7ac417409122673fc2706141d775dc2f5526eeb904b87">009f6ed2be11ef31…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #3</h2>
+            <p><b>Timestamp:</b> 01/04/2022</p>
+            <p><b>Data:</b> {"amount":5}</p>
+            <p><b>Previous hash:</b><br><code title="009f6ed2be11ef3184c7ac417409122673fc2706141d775dc2f5526eeb904b87">009f6ed2be11ef31…</code></p>
+            <p><b>Hash:</b><br><code title="0009a563ac56b70946c8dd8980e8108a3ebf65137907ec8bdadfbaebc7ff077b">0009a563ac56b709…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #4</h2>
+            <p><b>Timestamp:</b> 01/05/2022</p>
+            <p><b>Data:</b> {"amount":0}</p>
+            <p><b>Previous hash:</b><br><code title="0009a563ac56b70946c8dd8980e8108a3ebf65137907ec8bdadfbaebc7ff077b">0009a563ac56b709…</code></p>
+            <p><b>Hash:</b><br><code title="00cf1c777c87afb9c9827a2b371e0c67dcd30f47c51d90253082d17269fe52b4">00cf1c777c87afb9…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #5</h2>
+            <p><b>Timestamp:</b> 01/06/2022</p>
+            <p><b>Data:</b> {"amount":6}</p>
+            <p><b>Previous hash:</b><br><code title="00cf1c777c87afb9c9827a2b371e0c67dcd30f47c51d90253082d17269fe52b4">00cf1c777c87afb9…</code></p>
+            <p><b>Hash:</b><br><code title="00aab59d868810d5fbdf6047ad06cfa3173fb55524ae70817d37be7349c183c2">00aab59d868810d5…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #6</h2>
+            <p><b>Timestamp:</b> 01/07/2022</p>
+            <p><b>Data:</b> {"amount":5}</p>
+            <p><b>Previous hash:</b><br><code title="00aab59d868810d5fbdf6047ad06cfa3173fb55524ae70817d37be7349c183c2">00aab59d868810d5…</code></p>
+            <p><b>Hash:</b><br><code title="00ee22144acf1b8a157ba61bb00f15248bdf30f514b859f70f88feaf0ca6e4e1">00ee22144acf1b8a…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #7</h2>
+            <p><b>Timestamp:</b> 01/08/2022</p>
+            <p><b>Data:</b> {"amount":4}</p>
+            <p><b>Previous hash:</b><br><code title="00ee22144acf1b8a157ba61bb00f15248bdf30f514b859f70f88feaf0ca6e4e1">00ee22144acf1b8a…</code></p>
+            <p><b>Hash:</b><br><code title="00223b6739ecfde59e86b1a57d90680b5718718cfdcbfedbeae585286110cb73">00223b6739ecfde5…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #8</h2>
+            <p><b>Timestamp:</b> 01/09/2022</p>
+            <p><b>Data:</b> {"amount":9}</p>
+            <p><b>Previous hash:</b><br><code title="00223b6739ecfde59e86b1a57d90680b5718718cfdcbfedbeae585286110cb73">00223b6739ecfde5…</code></p>
+            <p><b>Hash:</b><br><code title="00bb127786fc3cc3f48256e44ef2121dcc8948bb7b9acc8fa5e70bb25bb8164e">00bb127786fc3cc3…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #9</h2>
+            <p><b>Timestamp:</b> 01/010/2022</p>
+            <p><b>Data:</b> {"amount":9}</p>
+            <p><b>Previous hash:</b><br><code title="00bb127786fc3cc3f48256e44ef2121dcc8948bb7b9acc8fa5e70bb25bb8164e">00bb127786fc3cc3…</code></p>
+            <p><b>Hash:</b><br><code title="0020ab69df9a260ea608e06799a9d84554f39e55dd07e1a86882120d896c52ae">0020ab69df9a260e…</code></p>
+            <p class="status">✓ valid</p>
+        </div><div class="arrow ">➜</div>
+        <div class="block ok">
+            <h2>Block #10</h2>
+            <p><b>Timestamp:</b> 01/011/2022</p>
+            <p><b>Data:</b> {"amount":5}</p>
+            <p><b>Previous hash:</b><br><code title="0020ab69df9a260ea608e06799a9d84554f39e55dd07e1a86882120d896c52ae">0020ab69df9a260e…</code></p>
+            <p><b>Hash:</b><br><code title="0000aa28eeaf5ad4753c073a59e3c45c2ebdc61590e7380d431990e3ac7f2c85">0000aa28eeaf5ad4…</code></p>
+            <p class="status">✓ valid</p>
+        </div></div>
+</body></html>
