@@ -6,8 +6,8 @@ class Block {
         this.previousHash = previousHash;
         this.timestamp = timestamp;
         this.data = data;
+        this.nonce = 0;                     // FIX: set before the hash is calculated
         this.hash = this.calculateHash();
-        this.nonce = 0;
     }
 
     calculateHash() {
@@ -74,7 +74,7 @@ console.log(JSON.stringify(RtuCoin, null, 4));
 // ---------------------------------------------------------------
 // Visualization: writes chain.html - open it in any web browser
 // ---------------------------------------------------------------
-function visualize(blockchain, file = "chain.html") {
+function visualize(blockchain, file = "chain.html", title = "RtuCoin blockchain") {
     const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
     const short = (h) => h.length > 16 ? h.slice(0, 16) + "…" : h;
 
@@ -82,7 +82,8 @@ function visualize(blockchain, file = "chain.html") {
         // a block is OK if its stored hash is correct and it points to the previous block
         const hashOk = b.hash === b.calculateHash();
         const linkOk = i === 0 || b.previousHash === blockchain.chain[i - 1].hash;
-        const ok = hashOk && linkOk;
+        const powOk = i === 0 || b.hash.startsWith("0".repeat(blockchain.difficulty));
+        const ok = hashOk && linkOk && powOk;
         const arrow = i === 0 ? "" : `<div class="arrow ${linkOk ? "" : "broken"}">➜</div>`;
         return `${arrow}
         <div class="block ${ok ? "ok" : "bad"}">
@@ -91,7 +92,8 @@ function visualize(blockchain, file = "chain.html") {
             <p><b>Data:</b> ${esc(JSON.stringify(b.data))}</p>
             <p><b>Previous hash:</b><br><code title="${b.previousHash}">${short(b.previousHash)}</code></p>
             <p><b>Hash:</b><br><code title="${b.hash}">${short(b.hash)}</code></p>
-            <p class="status">${ok ? "✓ valid" : "✗ " + (!hashOk ? "hash does not match data" : "broken link")}</p>
+            <p><b>Nonce:</b> ${b.nonce}</p>
+            <p class="status">${ok ? "✓ valid" : "✗ " + (!hashOk ? "hash does not match data" : !powOk ? "not mined" : "broken link")}</p>
         </div>`;
     }).join("");
 
@@ -111,13 +113,76 @@ function visualize(blockchain, file = "chain.html") {
   .arrow.broken { color: #d03b3b; }
 </style></head>
 <body>
-  <h1>RtuCoin blockchain (${blockchain.chain.length} blocks)</h1>
+  <h1>${esc(title)} (${blockchain.chain.length} blocks)</h1>
   <p>Each block stores the hash of the block before it. Hover over a hash to see it in full.</p>
   <div class="chain">${blocks}</div>
 </body></html>`;
 
     fs.writeFileSync(file, html);
-    console.log("Visualization saved to " + file + " - open it in your browser.");
+    console.log("Picture: " + file);
 }
 
-visualize(RtuCoin);
+visualize(RtuCoin, "chain.html", "Original RtuCoin blockchain");
+
+// UNAUTHORIZED CHANGES
+
+function copyChain(blockchain) {
+    const copy = new Blockchain();
+    copy.difficulty = blockchain.difficulty;
+    copy.chain = blockchain.chain.map(b =>
+        Object.assign(Object.create(Block.prototype), JSON.parse(JSON.stringify(b))));
+    return copy;
+}
+
+function compareWithCopy(original, other) {
+    for (let i = 0; i < original.chain.length; i++) {
+        if (!other.chain[i] || JSON.stringify(other.chain[i]) !== JSON.stringify(original.chain[i])) return "differs from the kept copy at block #" + i;
+    }
+    return "matches the kept copy";
+}
+
+function remine(block, difficulty) {
+    block.nonce = 0;
+    block.hash = block.calculateHash();
+    block.mineBlock(difficulty);
+}
+
+function findProblems(blockchain) {
+    const problems = [];
+    const zeros = "0".repeat(blockchain.difficulty);
+    blockchain.chain.forEach((b, i) => {
+        if (b.hash !== b.calculateHash()) problems.push("block #" + i + ": hash does not match its data");
+        if (i > 0 && !b.hash.startsWith(zeros)) problems.push("block #" + i + ": not mined (hash does not start with " + zeros + ")");
+        if (i > 0 && b.previousHash !== blockchain.chain[i - 1].hash) problems.push("block #" + i + ": previousHash does not match block #" + (i - 1));
+    });
+    return problems;
+}
+
+function report(id, title, chain, file) {
+    const valid = chain.isChainValid();
+    const problems = findProblems(chain);
+    const compare = compareWithCopy(RtuCoin, chain);
+    console.log("\n=== " + id + ". " + title + " ===");
+    console.log("isChainValid():        " + valid);
+    console.log("stricter check:        " + (problems.length ? problems.join("; ") : "no problems found"));
+    console.log("compared with a copy:  " + compare);
+    visualize(chain, file, id + ". " + title);
+}
+
+const MIDDLE = 5;
+const LAST = RtuCoin.chain.length - 1;
+
+//Change a block in the middle
+let fake = copyChain(RtuCoin);
+fake.chain[MIDDLE].data = { amount: 1000 };
+report("1", "Change middle block data only", fake, "1_middle_data.html");
+
+//Change the last block
+fake = copyChain(RtuCoin);
+fake.chain[LAST].data = { amount: 1000 };
+report("2", "Change last block data only", fake, "2_last_data.html");
+
+//Add another block at the end
+fake = copyChain(RtuCoin);
+fake.addBlock(new Block(LAST + 1, "01/12/2022", { amount: 5 }));
+report("3", "Add a block at the end", fake, "3_add_last_block.html");
